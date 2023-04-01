@@ -1,0 +1,22 @@
+## Standard
+
+.DS_Store
+.idea
+
+## Terraform
+
+*.tfstate
+*.tfstate.*
+**.terraform
+**.terraform.lock.*
+
+## Credentials
+
+**google_credentials.json
+
+## Python
+**__pycache__/
+.ipynb_checkpoints/
+
+## Data
+*.csv
