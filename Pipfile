@@ -11,6 +11,7 @@ pyarrow = "*"
 pandas-gbq = "==0.18.1"
 dbt-core = "*"
 dbt-bigquery = "*"
+requests = "*"
 
 [dev-packages]
 

@@ -1,7 +1,7 @@
 terraform {
   backend "gcs" {
-     bucket  = "de-zoomcamp-project-terraform"
-     prefix  = "terraform/state"
+     bucket  = "de-zoomcamp-terraform"
+     prefix  = "terraform/state/project-covid.tfstate"
   }
   required_version = "1.3.9"
   
