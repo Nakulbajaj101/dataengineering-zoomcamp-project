@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pandas as pd
 from gcp.utils import Bigquery
+from google.cloud import bigquery
 from prefect import flow, task
 from prefect_gcp.cloud_storage import GcsBucket
 from schemas import covid_19_daily_data_schema
@@ -21,20 +22,23 @@ def get_file_urlpath(url: str, year: int, month: int, day: int) -> str:
 def fetch_data_csv(url: str, iterator=True, sep=",", chunksize=100000) -> Path:
     """Function to fetch data"""
 
-    if iterator:
-        df_iter = pd.read_csv(filepath_or_buffer=url, iterator=iterator, sep=sep, chunksize=chunksize)
-        df = next(df_iter)
-    else:
-        df = pd.read_csv(filepath_or_buffer=url)
+    try:
+        if iterator:
+            df_iter = pd.read_csv(filepath_or_buffer=url, iterator=iterator, sep=sep, chunksize=chunksize)
+            df = next(df_iter)
+        else:
+            df = pd.read_csv(filepath_or_buffer=url)
 
-    for dir_path in [RAW_DATA_DIR, TRANSFORM_DATA_DIR]:
-        if not os.path.exists(f".{dir_path}"):
-            os.makedirs(f".{dir_path}")
+        for dir_path in [RAW_DATA_DIR, TRANSFORM_DATA_DIR]:
+            if not os.path.exists(f".{dir_path}"):
+                os.makedirs(f".{dir_path}")
 
-    filename = url.split("/")[-1].replace(".csv",".parquet")
-    raw_data_path = Path(f".{RAW_DATA_DIR}/{filename}")
-    df.to_parquet(raw_data_path, compression="gzip")
-    return raw_data_path
+        filename = url.split("/")[-1].replace(".csv",".parquet")
+        raw_data_path = Path(f".{RAW_DATA_DIR}/{filename}")
+        df.to_parquet(raw_data_path, compression="gzip")
+        return raw_data_path
+    except Exception as e:
+        print(e)
     
 
 @task(retries=2, log_prints=True)
@@ -81,7 +85,7 @@ def load_data_gcs(file_path, bucket_block, bucket_path, remove_source_file_on_co
 
 
 @task(retries=2, log_prints=True)
-def upload_data_bq(secret_name: str="", table: str="", dataset: str="", schema: str="",gcs_uri: str="", time_partitioning: bool=False, partition_by: str=""):
+def upload_data_bq(secret_name: str="", table: str="", dataset: str="", schema: list[bigquery.SchemaField]=[],gcs_uri: str="", time_partitioning: bool=False, partition_by: str=""):
     """Function to upload data from gcs to bigquery"""
     
     bq = Bigquery(secret_name=f"{secret_name}")
@@ -89,6 +93,7 @@ def upload_data_bq(secret_name: str="", table: str="", dataset: str="", schema: 
                  table=table,
                  gcs_uri=gcs_uri,
                  autodetect=False,
+                 schema=schema,
                  time_partitioning=time_partitioning,
                  partition_by=partition_by)
 
@@ -109,14 +114,19 @@ def daily(year: int, month: int, day: int):
                             day=day)
   
     raw_file_path = fetch_data_csv(url=file_url, iterator=True, sep=",", chunksize=100000)
-    transform_file_path = transform_data(raw_file_path=raw_file_path, remove_raw_on_completion=False)
-    load_data_gcs(file_path=transform_file_path, bucket_block="covid-us-daily-data", bucket_path=transform_file_path, remove_source_file_on_completion=False)
-    upload_data_bq(secret_name="covid-data-prefect-flows", 
-                table=table,
-                schema=covid_19_daily_data_schema,
-                dataset=dataset,
-                gcs_uri=gcs_uri
-                )
+    if raw_file_path:
+        transform_file_path = transform_data(raw_file_path=raw_file_path, remove_raw_on_completion=True)
+        load_data_gcs(file_path=transform_file_path, bucket_block="covid-us-daily-data", bucket_path=transform_file_path, remove_source_file_on_completion=True)
+        upload_data_bq(secret_name="covid-data-prefect-flows", 
+                    table=table,
+                    schema=covid_19_daily_data_schema,
+                    dataset=dataset,
+                    gcs_uri=gcs_uri,
+                    time_partitioning=True,
+                    partition_by="DATASET_DATE"
+                    )
+    else:
+        print("Data cannot be found")
 
     
 @flow(name="covid_cases_parent_flow")
@@ -128,4 +138,4 @@ def main(years: list=[], months: list=[], days: list=[]):
                 daily(year=year, month=month, day=day)
 
 if __name__ == "__main__":
-    main(years=[2020, 2021], months=[1,2], days=[1,2,3,4,5,6,7,8,9,10])
+    main(years=[2020, 2021], months=[1,2], days=[1,2,3,4])

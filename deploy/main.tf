@@ -81,7 +81,7 @@ resource "google_storage_bucket_iam_policy" "covid_data_bucket_policy" {
 
 resource "google_bigquery_dataset" "covid_dataset" {
   dataset_id = var.covid_dataset
-  description = "This is the raw taxi dataset"
+  description = "This is the covid cases dataset"
   location = var.region
   project = var.project
 }
