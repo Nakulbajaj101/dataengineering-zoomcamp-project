@@ -20,3 +20,4 @@
 
 ## Data
 *.csv
+*.parquet

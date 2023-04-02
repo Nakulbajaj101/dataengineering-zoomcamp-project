@@ -41,9 +41,53 @@ resource "google_storage_bucket" "covid_19_bucket" {
     force_destroy = true
 }
 
+resource "google_storage_bucket_iam_policy" "covid_data_bucket_policy" {
+  bucket = google_storage_bucket.covid_19_bucket.name
+  policy_data = jsonencode(
+            {
+               bindings = [
+                   {
+                       members = [
+                           "projectEditor:dataengineeringzoomcamp-2023",
+                           "projectOwner:dataengineeringzoomcamp-2023",
+                        ]
+                       role    = "roles/storage.legacyBucketOwner"
+                    },
+                   {
+                       members = [
+                           "projectViewer:dataengineeringzoomcamp-2023",
+                           "serviceAccount:de-zoomcamp-project-prefect@dataengineeringzoomcamp-2023.iam.gserviceaccount.com"
+                        ]
+                       role    = "roles/storage.legacyBucketReader"
+                    },
+                   {
+                       members = [
+                           "projectEditor:dataengineeringzoomcamp-2023",
+                           "projectOwner:dataengineeringzoomcamp-2023",
+                           "serviceAccount:de-zoomcamp-project-prefect@dataengineeringzoomcamp-2023.iam.gserviceaccount.com"
+                        ]
+                       role    = "roles/storage.legacyBucketWriter"
+                    },
+                   {
+                       members = [
+                           "projectViewer:dataengineeringzoomcamp-2023",
+                        ]
+                       role    = "roles/storage.legacyObjectReader"
+                    },
+                ]
+            }
+        )
+}
+
 resource "google_bigquery_dataset" "covid_dataset" {
   dataset_id = var.covid_dataset
   description = "This is the raw taxi dataset"
   location = var.region
   project = var.project
+}
+
+resource "google_bigquery_dataset_iam_member" "covid_data_editor" {
+  dataset_id = google_bigquery_dataset.covid_dataset.dataset_id
+  role       = "roles/bigquery.dataEditor"
+  member     = "serviceAccount:de-zoomcamp-project-prefect@dataengineeringzoomcamp-2023.iam.gserviceaccount.com"
 }
