@@ -41,6 +41,68 @@ resource "google_storage_bucket" "covid_19_bucket" {
     force_destroy = true
 }
 
+resource "google_storage_bucket" "covid_19_bucket_flows" {
+    name = "${local.my_covid_flows_bucket}_${var.project}"
+    public_access_prevention = "enforced"
+    storage_class = var.storage_class
+    uniform_bucket_level_access = true
+    location = var.region
+
+    versioning {
+      enabled = true
+    }
+
+    lifecycle_rule {
+      action {
+        type = "Delete"
+      }
+      condition {
+        age = var.bucket_age
+      }
+    }
+
+    force_destroy = true
+}
+
+resource "google_storage_bucket_iam_policy" "covid_data_flows_bucket_policy" {
+  bucket = google_storage_bucket.covid_19_bucket_flows.name
+  policy_data = jsonencode(
+            {
+               bindings = [
+                   {
+                       members = [
+                           "projectEditor:dataengineeringzoomcamp-2023",
+                           "projectOwner:dataengineeringzoomcamp-2023",
+                        ]
+                       role    = "roles/storage.legacyBucketOwner"
+                    },
+                   {
+                       members = [
+                           "projectViewer:dataengineeringzoomcamp-2023",
+                           "serviceAccount:de-zoomcamp-project-prefect@dataengineeringzoomcamp-2023.iam.gserviceaccount.com"
+                        ]
+                       role    = "roles/storage.legacyBucketReader"
+                    },
+                   {
+                       members = [
+                           "projectEditor:dataengineeringzoomcamp-2023",
+                           "projectOwner:dataengineeringzoomcamp-2023",
+                           "serviceAccount:de-zoomcamp-project-prefect@dataengineeringzoomcamp-2023.iam.gserviceaccount.com"
+                        ]
+                       role    = "roles/storage.legacyBucketWriter"
+                    },
+                   {
+                       members = [
+                           "projectViewer:dataengineeringzoomcamp-2023",
+                        ]
+                       role    = "roles/storage.legacyObjectReader"
+                    },
+                ]
+            }
+        )
+}
+
+
 resource "google_storage_bucket_iam_policy" "covid_data_bucket_policy" {
   bucket = google_storage_bucket.covid_19_bucket.name
   policy_data = jsonencode(

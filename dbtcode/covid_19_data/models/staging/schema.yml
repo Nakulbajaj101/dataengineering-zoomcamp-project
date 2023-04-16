@@ -1,0 +1,45 @@
+version: 2
+
+sources:
+  - name: staging
+    database: dataengineeringzoomcamp-2023
+    schema: covid_19_cases
+
+    tables:
+      - name: daily_state_reports_us
+
+models:
+  - name: covid_cases_fact
+    description: Fact table of all covid state level data for USA reported monthly
+    columns:
+      - name: record_id
+        description: Surrogate key of the table produced with a combination 'STATE_ID', 'COUNTRY_ID', 'ISO3_ID', 'DATASET_DATE columns
+        tests:
+            - not_null
+  
+  - name: iso3_dim
+    description: Dimension table of iso3 attributes such as lat , long
+    columns:
+      - name: iso3_id
+        description: Primary key of the table
+        tests:
+            - not_null
+            - unique
+
+  - name: country_dim
+    description: Dimension table of country attributes such as lat , long
+    columns:
+      - name: country_id
+        description: Primary key of the table
+        tests:
+            - not_null
+            - unique
+
+  - name: states_dim
+    description: Dimension table of state attributes such as lat , long and uid
+    ccolumns:
+      - name: state_id
+        description: Primary key of the table
+        tests:
+            - not_null
+            - unique

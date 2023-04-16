@@ -1,5 +1,6 @@
 locals {
   my_covid_bucket = "covid_19_bucket"
+  my_covid_flows_bucket = "covid_19_flows_bucket"
 }
 
 variable "project" {

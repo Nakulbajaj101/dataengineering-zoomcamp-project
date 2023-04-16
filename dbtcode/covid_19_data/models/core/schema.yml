@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: monthly_country_covid_deaths
+    description: Aggregated data on deaths and recovery for covid cases per month for USA
+    columns:
+      - name: DT
+        description: Date truncated to monthly level in format YYYY-MM-DD where DD is 01
+        tests:
+            - not_null
+      
+      - name: FATALITY_PERC
+        description: Number of deaths per confirmed cases, represented as a ratio
+
+  - name: monthly_iso3_covid_deaths
+    description: Aggregated data on deaths and recovery for covid cases per month for iso3 region for USA
+    columns:
+      - name: DT
+        description: Date truncated to monthly level in format YYYY-MM-DD where DD is 01
+        tests:
+            - not_null
+      
+      - name: FATALITY_PERC
+        description: Number of deaths per confirmed cases, represented as a ratio
+  
+  - name: monthly_state_covid_deaths
+    description: Aggregated data on deaths and recovery for covid cases per month for state region for USA
+    columns:
+      - name: DT
+        description: Date truncated to monthly level in format YYYY-MM-DD where DD is 01
+        tests:
+            - not_null
+
+      - name: FATALITY_PERC
+        description: Number of deaths per confirmed cases, represented as a ratio
+  

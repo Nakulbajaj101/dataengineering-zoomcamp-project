@@ -1,0 +1,44 @@
+###
+### A complete description of a Prefect Deployment for flow 'covid_cases_daily_flow'
+###
+name: covid_daily
+description: null
+version: d5d6952eac1eb2f93ecde26d07060f8a
+# The work queue that will handle this deployment's runs
+work_queue_name: default
+tags: []
+parameters: {}
+schedule:
+  rrule: 'FREQ=DAILY'
+  timezone: 'Australia/Sydney'
+infra_overrides: {}
+infrastructure:
+  type: process
+  env: {}
+  labels: {}
+  name: null
+  command: null
+  stream_output: true
+  working_dir: null
+  block_type_slug: process
+  _block_type_slug: process
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: covid_cases_daily_flow
+manifest_path: null
+storage: null
+path: /Users/bajajn/dataengineering-zoomcamp/dataengineering-zoomcamp-project/etl
+entrypoint: etl_covid_data.py:daily
+parameter_openapi_schema:
+  title: Parameters
+  type: object
+  properties:
+    date:
+      title: date
+      position: 0
+      type: string
+      format: date-time
+  required: null
+  definitions: null

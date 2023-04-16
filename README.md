@@ -61,3 +61,6 @@ pip install -r requirements.txt
 ### Setup dbt
 
 * dataset_name: "covid_19_cases"
+
+
+Enable container regitsry api for google
