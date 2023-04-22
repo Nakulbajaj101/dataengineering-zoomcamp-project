@@ -14,6 +14,10 @@ apply_local:
 apply_prod:
 	bash ./deploy/run_apply.sh
 
+# Deploy prefect flows
+deploy_prefect_flows:
+	bash ./etl/create_prefect_deployments.sh
+
 # For local setup
 setup:
 	pip install -r requirements.txt
