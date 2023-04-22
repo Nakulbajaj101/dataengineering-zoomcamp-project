@@ -13,7 +13,6 @@ on:
 env:
   # dbt env variables used in your dbt profiles.yml
   DBT_GOOGLE_KEYFILE: /tmp/google/google-service-account.json
-  DBT_PROFILES_DIR: ./dbtcode/covid_19_data
   # the contents of the keyfile pulled from GitHub Actions secrets 
   KEYFILE_CONTENTS: ${{ secrets.GCP_DBT_SERVICE_ACCOUNT }}
 
@@ -42,7 +41,7 @@ jobs:
           pip install dbt-bigquery
           dbt deps
           dbt --version
-          dbt debug
+          dbt debug --profiles-dir profiles
 
       - name: Run dbt
-        run: dbt build
+        run: dbt build --profiles-dir profiles
