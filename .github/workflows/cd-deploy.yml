@@ -48,6 +48,6 @@ jobs:
       with:
         requirements: prefect-requirements.txt
     - name: Authenticate to Prefect dependencies
-      run: prefect auth login -k $KEY -w "bajajnakulgmailcom/data-engineering"
+      run: prefect cloud login -k $KEY -w "bajajnakulgmailcom/data-engineering"
     - name: Register flow
       run: make deploy_prefect_flows
