@@ -34,3 +34,5 @@ jobs:
       - name: TF apply_prod
         working-directory: './'
         run: make apply_prod
+        env:
+          GOOGLE_CREDENTIALS: '${{ secrets.GCP_CREDENTIALS }}'

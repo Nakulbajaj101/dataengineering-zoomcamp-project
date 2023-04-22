@@ -32,7 +32,10 @@ jobs:
 
     - name: 'Use gcloud CLI'
       run: 'gcloud info'
-
+  
+  tf-plan:
+    runs-on: ubuntu-latest
+    steps:
     - name: Checkout Repo
       uses: actions/checkout@v2
 
