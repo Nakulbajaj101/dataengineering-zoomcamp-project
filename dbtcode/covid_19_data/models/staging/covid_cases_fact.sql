@@ -57,4 +57,3 @@ WHERE DATASET_DATE NOT IN (
     SELECT DISTINCT DATASET_DATE FROM {{ this }}
 )
 {% endif %}
-

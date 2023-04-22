@@ -1,0 +1,10 @@
+covid_19_data:
+  outputs:
+    prod:
+      keyfile: "{{ env_var('DBT_GOOGLE_KEYFILE') }}"
+      method: service-account
+      project: dataengineeringzoomcamp-2023
+      schema: covid_19_cases
+      threads: 10
+      type: bigquery
+  target: prod
