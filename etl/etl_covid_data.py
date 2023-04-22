@@ -1,8 +1,9 @@
 import os
-from datetime import datetime, date
+from datetime import date, datetime
 from pathlib import Path
 
 import pandas as pd
+from etl_dbt import run_dbt_from_github
 from gcp.utils import Bigquery
 from google.cloud import bigquery
 from prefect import flow, task
@@ -146,6 +147,9 @@ def daily(date: datetime=None):
                     time_partitioning=True,
                     partition_by="DATASET_DATE"
                     )
+        run_dbt_from_github(github_block="covid-data-dbt-clone",
+                        dbt_dir_path="dbtcode/covid_19_data",
+                        dbt_core_operation_block="covid-dbt-prod-build-operation")
     else:
         print("Data cannot be found")
 

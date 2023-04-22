@@ -21,3 +21,6 @@
 ## Data
 *.csv
 *.parquet
+
+## Dbt code
+dbtcode/
