@@ -39,14 +39,14 @@ jobs:
 
   deploy-prefect:
     runs-on: ubuntu-latest
-    container: prefecthq/prefect:latest
+    container: prefecthq/prefect:2.7.7-python3.9
     env: 
       KEY: ${{ secrets.PREFECT_TENANT_API_KEY}}
     steps:
     - uses: actions/checkout@v2
     - uses: BSFishy/pip-action@v1
       with:
-        requirements: requirements.txt
+        requirements: prefect-requirements.txt
     - name: Authenticate to Prefect dependencies
       run: prefect auth login -k $KEY -w "bajajnakulgmailcom/data-engineering"
     - name: Register flow
