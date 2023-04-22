@@ -6,9 +6,9 @@ on:
     types: [opened, synchronize, reopened]
     branches: ['main']
     paths:
-      - models/**
-      - seeds/**
-      - tests/**
+      - dbtcode/covid_19_data/models/**
+      - dbtcode/covid_19_data/seeds/**
+      - dbtcode/covid_19_data/tests/**
 
 env:
   # dbt env variables used in your dbt profiles.yml
