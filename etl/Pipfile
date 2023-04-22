@@ -10,6 +10,8 @@ pyarrow = "*"
 dbt-core = "*"
 dbt-bigquery = "*"
 requests = "*"
+prefect-dbt = {extras = ["bigquery"], version = "*"}
+prefect-github = "*"
 
 [dev-packages]
 
