@@ -44,4 +44,5 @@ jobs:
           dbt debug --profiles-dir profiles
 
       - name: Run dbt
+        working-directory: './dbtcode/covid_19_data'
         run: dbt build --profiles-dir profiles
