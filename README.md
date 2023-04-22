@@ -1,5 +1,11 @@
 # dataengineering-zoomcamp-project
 
+[![CD_DEPLOY](https://github.com/Nakulbajaj101/dataengineering-zoomcamp-project/actions/workflows/cd-deploy.yml/badge.svg?branch=main)](https://github.com/Nakulbajaj101/dataengineering-zoomcamp-project/actions/workflows/cd-deploy.yml)
+
+[![CI_TESTS](https://github.com/Nakulbajaj101/dataengineering-zoomcamp-project/actions/workflows/ci-tests.yml/badge.svg)](https://github.com/Nakulbajaj101/dataengineering-zoomcamp-project/actions/workflows/ci-tests.yml)
+
+[![DBT_BIGQUERY](https://github.com/Nakulbajaj101/dataengineering-zoomcamp-project/actions/workflows/dbt-workflow.yml/badge.svg)](https://github.com/Nakulbajaj101/dataengineering-zoomcamp-project/actions/workflows/dbt-workflow.yml)
+
 ### Problem statement and project description
 
 ### Data
