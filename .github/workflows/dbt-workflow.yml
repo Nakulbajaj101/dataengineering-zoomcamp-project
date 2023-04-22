@@ -1,0 +1,48 @@
+name: dbt_BigQuery
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: ['main']
+    paths:
+      - models/**
+      - seeds/**
+      - tests/**
+
+env:
+  # dbt env variables used in your dbt profiles.yml
+  DBT_GOOGLE_KEYFILE: /tmp/google/google-service-account.json
+  DBT_PROFILES_DIR: ./dbtcode/covid_19_data
+  # the contents of the keyfile pulled from GitHub Actions secrets 
+  KEYFILE_CONTENTS: ${{ secrets.GCP_DBT_SERVICE_ACCOUNT }}
+
+jobs:
+  build:
+    name: install and build dbt
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # Prep Google keyfile
+      - run: mkdir -p "$(dirname $DBT_GOOGLE_KEYFILE)" 
+      - run: echo "$KEYFILE_CONTENTS" > $DBT_GOOGLE_KEYFILE
+    
+      - name: Install Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9.16
+
+      - name: Checkout Repo
+        uses: actions/checkout@master
+
+      - name: Install dbt
+        working-directory: './dbtcode/covid_19_data'
+        run: |
+          pip install dbt-bigquery
+          dbt deps
+          dbt --version
+          dbt debug
+
+      - name: Run dbt
+        run: dbt build

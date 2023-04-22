@@ -22,5 +22,3 @@
 *.csv
 *.parquet
 
-## Dbt code
-dbtcode/
