@@ -44,3 +44,5 @@ jobs:
     - name: TF plan-prod
       working-directory: './'
       run: make plan_prod
+      env:
+        GOOGLE_CREDENTIALS: '${{ secrets.GCP_CREDENTIALS }}'
