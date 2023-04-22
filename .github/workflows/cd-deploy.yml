@@ -1,0 +1,36 @@
+name: CD_DEPLOY
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  setup-gcp:
+    runs-on: ubuntu-latest
+    steps:
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v1'
+
+    - name: 'Use gcloud CLI'
+      run: 'gcloud info'
+
+  deploy-infra:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.0.0
+          terraform_wrapper: false
+
+      - name: TF plan-stage
+        working-directory: './'
+        run: make apply_prod

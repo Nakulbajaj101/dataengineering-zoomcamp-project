@@ -1,0 +1,50 @@
+name: CI_TESTS
+on:
+  pull_request:
+    branches:
+      - main
+env:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Setup Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        working-directory: './'
+        run: pip install pipenv==2022.8.5 && pipenv install
+  
+  setup-gcp:
+    runs-on: ubuntu-latest
+    steps:
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v1'
+
+    - name: 'Use gcloud CLI'
+      run: 'gcloud info'
+
+  tf-plan:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout Repo
+          uses: actions/checkout@v2
+
+        - name: Setup terraform
+          uses: hashicorp/setup-terraform@v2
+          with:
+            terraform_version: 1.0.0
+          
+        - name: TF plan-stage
+          working-directory: './'
+          run: make plan_prod
