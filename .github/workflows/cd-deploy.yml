@@ -5,20 +5,6 @@ on:
       - main
 
 jobs:
-  setup-gcp:
-    runs-on: ubuntu-latest
-    steps:
-    - id: 'auth'
-      uses: 'google-github-actions/auth@v1'
-      with:
-        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-
-    - name: 'Set up Cloud SDK'
-      uses: 'google-github-actions/setup-gcloud@v1'
-
-    - name: 'Use gcloud CLI'
-      run: 'gcloud info'
-
   deploy-infra:
     runs-on: ubuntu-latest
     steps:
@@ -38,6 +24,8 @@ jobs:
           GOOGLE_CREDENTIALS: '${{ secrets.GCP_CREDENTIALS }}'
 
   deploy-prefect:
+    name: Deploy Prefect
+    needs:  deploy-infra
     runs-on: ubuntu-latest
     container: prefecthq/prefect:2.7.7-python3.9
     env: 
