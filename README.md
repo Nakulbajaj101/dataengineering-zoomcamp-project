@@ -75,5 +75,4 @@ Enable container regitsry api for google
 Prepared the dashboard using Looker(Data Studio) from Google
 ![alt text](https://github.com/Nakulbajaj101/dataengineering-zoomcamp-project/blob/main/dashboard/Covid_Monthly_Analytical_Insights.png)
 
-If you wish to access to the dashboard please request access via link below:
-[Dashboard share link](https://lookerstudio.google.com/reporting/4cc8cc5e-0e83-4889-84a3-9236225b791a)
+If you wish to access to the dashboard please request access via link: [Dashboard share link](https://lookerstudio.google.com/reporting/4cc8cc5e-0e83-4889-84a3-9236225b791a)
