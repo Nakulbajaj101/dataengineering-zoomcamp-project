@@ -1,5 +1,5 @@
 #!/bin/bash
-PROJECT_ID=$1
+PROJECT_ID=dataengineeringzoomcamp-2023
 docker build -t prefect:covid .
-docker tag prefect:covid asia.gcr.io/$1/prefect:covid
-docker push asia.gcr.io/$1/prefect:covid
+docker tag prefect:covid asia.gcr.io/$PROJECT_ID/prefect:covid
+docker push asia.gcr.io/$PROJECT_ID/prefect:covid
