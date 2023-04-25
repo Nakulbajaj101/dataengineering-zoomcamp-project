@@ -11,8 +11,24 @@ env:
   GOOGLE_CREDENTIALS: '${{ secrets.GCP_CREDENTIALS }}'
 
 jobs:
+  tf-plan:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+
+    - name: Setup terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.3.9
+      
+    - name: TF plan-prod
+      working-directory: './'
+      run: make plan_prod
+
   deploy-infra:
     runs-on: ubuntu-latest
+    needs: tf-plan
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -26,10 +42,25 @@ jobs:
       - name: TF apply_prod
         working-directory: './'
         run: make apply_prod
+  
+  changes:
+    runs-on: ubuntu-latest
+    needs: deploy-infra
+    outputs:
+      src: ${{ steps.changes.outputs.src }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: |
+          src:
+            - 'etl/**'
 
   build-and-push-cloud-run-image:
     name: Build covid cloud run image
-    needs: deploy-infra
+    needs: changes
+    if: ${{ needs.changes.outputs.src == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
