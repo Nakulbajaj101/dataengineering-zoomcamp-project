@@ -18,9 +18,9 @@ DATASET_DATE
 ,LEAD(DEATHS,1) over (PARTITION BY fact.STATE_ID order by DATASET_DATE desc) as lagged_deaths
 ,LEAD(CONFIRMED,1) over (PARTITION BY fact.STATE_ID order by DATASET_DATE desc) as lagged_confirmed
 
- FROM {{ ref("covid_cases_fact") }} fact
- inner join {{ ref("country_dim") }} country
- on fact.COUNTRY_ID = country.COUNTRY_ID
+FROM {{ ref("covid_cases_fact") }} fact
+inner join {{ ref("country_dim") }} country
+on fact.COUNTRY_ID = country.COUNTRY_ID
 )
 
 ,agg as 
