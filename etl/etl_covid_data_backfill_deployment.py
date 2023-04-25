@@ -10,7 +10,8 @@ deployment = Deployment.build_from_flow(flow=main,
                                         name="covid_data_backfill",
                                         storage=gcp_cloud_storage_bucket_block,
                                         parameters={"start_date":"2020-03-01", "end_date": "2023-01-31"},
-                                        infrastructure=cloud_run_job_block
+                                        infrastructure=cloud_run_job_block,
+                                        work_queue_name="ubuntu"
                                         )
 
 if __name__ == "__main__":

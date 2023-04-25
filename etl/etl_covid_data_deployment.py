@@ -11,7 +11,8 @@ deployment = Deployment.build_from_flow(flow=daily,
                                         name="covid_daily",
                                         storage=gcp_cloud_storage_bucket_block,
                                         schedule=(RRuleSchedule(rrule="FREQ=DAILY", timezone="Australia/Sydney")),
-                                        infrastructure=cloud_run_job_block
+                                        infrastructure=cloud_run_job_block,
+                                        work_queue_name="ubuntu"
                                         )
 
 if __name__ == "__main__":
