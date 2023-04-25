@@ -4,6 +4,12 @@ on:
     branches:
       - main
 
+env:
+  AWS_DEFAULT_REGION: 'us-east-2'
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  GOOGLE_CREDENTIALS: '${{ secrets.GCP_CREDENTIALS }}'
+
 jobs:
   deploy-infra:
     runs-on: ubuntu-latest
@@ -20,8 +26,6 @@ jobs:
       - name: TF apply_prod
         working-directory: './'
         run: make apply_prod
-        env:
-          GOOGLE_CREDENTIALS: '${{ secrets.GCP_CREDENTIALS }}'
 
   deploy-prefect:
     name: Deploy Prefect
