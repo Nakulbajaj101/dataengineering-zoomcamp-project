@@ -46,7 +46,7 @@ jobs:
           image_name: prefect
           image_tag: covid, ${{ github.sha }}
           dockerfile: ./etl/Dockerfile
-          context: ./docker
+          context: .
           target: build
 
   deploy-prefect:
