@@ -27,9 +27,31 @@ jobs:
         working-directory: './'
         run: make apply_prod
 
+  build-and-push-cloud-run-image:
+    name: Build covid cloud run image
+    needs: deploy-infra
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+      - name: Building and pushing the image
+        uses: RafikFarhad/push-to-gcr-github-action@v5-beta
+        with:
+          registry: asia.gcr.io
+          project_id: dataengineeringzoomcamp-2023
+          image_name: prefect
+          image_tag: covid, ${{ github.sha }}
+          dockerfile: ./etl/Dockerfile
+          context: ./docker
+          target: build
+
   deploy-prefect:
     name: Deploy Prefect
-    needs:  deploy-infra
+    needs:  build-and-push-cloud-run-image
     runs-on: ubuntu-latest
     container: prefecthq/prefect:2.7.7-python3.9
     env: 
