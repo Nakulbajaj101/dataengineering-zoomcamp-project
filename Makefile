@@ -20,7 +20,7 @@ apply_prod:
 
 # Destroy terraform
 destroy_prod_aws:
-	bash ./deploy/aws/run_apply.sh
+	bash ./deploy/aws/run_destroy.sh
 
 destroy_prod_gcp:
 	bash ./deploy/gcp/run_destroy.sh
