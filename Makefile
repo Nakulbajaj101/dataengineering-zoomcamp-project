@@ -25,10 +25,6 @@ destroy_prod_aws:
 destroy_prod_gcp:
 	bash ./deploy/gcp/run_destroy.sh
 
-# Destroy local
-destroy_prod_aws:
-	bash ./deploy/aws/run_destroy.sh
-
 destroy_prod: destroy_prod_gcp destroy_prod_aws
 
 destroy_prod_local: destroy_prod_gcp destroy_prod_aws
