@@ -206,6 +206,12 @@ For prod: In the root directory of the repo run `make apply_prod`
 To destroy
 For prod: In the root directory of the repo run `make destroy_prod`
 
+
+## CICD
+The github workflows are configured to run at each pull request. This will run terraform plan and once succeeded a reviewer can merge the request. If anycode in dbt repo will be changed, even dbt code will run. Once everything passes a reviewer can merge the request. 
+For CD, post merging of pull request, terraform plan and apply will run, and if code has changed for prefect flows, then a new image will be pushed to ECR and new code will be published to prefect cloud.
+
+
 Contact for questions or support
 Nakul Bajaj @Nakulbajaj101
 
