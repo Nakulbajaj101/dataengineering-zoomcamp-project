@@ -159,7 +159,7 @@ covid_19_data:
 ```
 
 We need to ensure an environment variable `DBT_GOOGLE_KEYFILE` which stores absolute path to google editor service account json file. 
-To learn more about running DBT navigate to the folder at [DBT folder README](https://github.com/Nakulbajaj101/dataengineering-zoomcamp-project/blob/main/dbtcode/covid_19_data/README.MD)
+To learn more about running DBT navigate to the folder at [DBT folder README](https://github.com/Nakulbajaj101/dataengineering-zoomcamp-project/blob/main/dbtcode/covid_19_data/README.md)
 
 The source table in bigquery have the time partitioning and all the tables in core dbt directory have partitiong and clustering
 
